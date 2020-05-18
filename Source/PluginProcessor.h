@@ -61,6 +61,9 @@ private:
   std::shared_ptr<spleeter::Filter> m_filter;
   std::shared_ptr<rtff::AudioBuffer> m_buffer;
   AudioParameterFloat* m_vocals_volume;
+  AudioParameterFloat* m_bass_volume;
+  AudioParameterFloat* m_drums_volume;
+  AudioParameterFloat* m_other_volume;
   
   std::vector<LagrangeInterpolator> m_in_interpolator;
   std::vector<LagrangeInterpolator> m_out_interpolator;

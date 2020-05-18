@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="bZFDw6" name="spleeter-vst" projectType="audioplug" jucerVersion="5.4.7"
-              pluginFormats="buildVST3" pluginVST3Category="Filter,Fx,Up-Downmix">
-  <MAINGROUP id="ivnSRh" name="spleeter-vst">
+<JUCERPROJECT id="bZFDw6" name="spleeter-dj" projectType="audioplug" jucerVersion="5.4.7"
+              pluginFormats="buildVST3" pluginVST3Category="Filter,Fx,Up-Downmix"
+              version="0.0.1" companyName="Azuki">
+  <MAINGROUP id="ivnSRh" name="spleeter-dj">
     <GROUP id="{073EE4F9-0347-2967-7DDE-C84EB79D6CA9}" name="Source">
       <FILE id="TSPpQC" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

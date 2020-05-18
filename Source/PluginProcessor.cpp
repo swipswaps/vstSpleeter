@@ -27,7 +27,10 @@ SpleetervstAudioProcessor::SpleetervstAudioProcessor()
       ,
       m_filter(nullptr), m_buffer(nullptr) {
 
-  addParameter (m_vocals_volume = new AudioParameterFloat("m_vocals_volume", "VocalsGain", 0.0f, 1.0f, 1.0f));
+  addParameter (m_vocals_volume = new AudioParameterFloat("m_vocals_volume", "Vocals", 0.0f, 1.0f, 1.0f));
+  addParameter (m_drums_volume = new AudioParameterFloat("m_drums_volume", "Drums", 0.0f, 1.0f, 1.0f));
+  addParameter (m_bass_volume = new AudioParameterFloat("m_bass_volume", "Bass", 0.0f, 1.0f, 1.0f));
+  addParameter (m_other_volume = new AudioParameterFloat("m_other_volume", "Other", 0.0f, 1.0f, 1.0f));
 
   std::error_code err;
   auto models_path =
@@ -110,10 +113,10 @@ void SpleetervstAudioProcessor::prepareToPlay(double sampleRate,
   m_interpolation_ratio = static_cast<float>(block_size) / samplesPerBlock;
   
   // Initialize the buffer
-  m_filter->set_volume(0, static_cast<double>(m_vocals_volume->get()));
+  m_filter->set_volume(0, 1.0);
   m_filter->set_volume(1, 1.0);
   m_filter->set_volume(2, 1.0);
-  m_filter->set_volume(4, 1.0);
+  m_filter->set_volume(3, 1.0);
   m_filter->set_block_size(block_size);
   m_buffer = std::make_shared<rtff::AudioBuffer>(block_size, 2);
   
@@ -201,6 +204,9 @@ void SpleetervstAudioProcessor::processBlock(AudioBuffer<float> &buffer,
   
   // convert to stereo
   m_filter->set_volume(0, static_cast<double>(m_vocals_volume->get()));
+  m_filter->set_volume(1, static_cast<double>(m_drums_volume->get()));
+  m_filter->set_volume(2, static_cast<double>(m_bass_volume->get()));
+  m_filter->set_volume(3, static_cast<double>(m_other_volume->get()));
   m_filter->ProcessBlock(m_buffer.get());
   
   if (totalNumInputChannels == 2) {
@@ -238,6 +244,9 @@ void SpleetervstAudioProcessor::getStateInformation(MemoryBlock &destData) {
   // You could do that either as raw data, or use the XML or ValueTree classes
   // as intermediaries to make it easy to save and load complex data.
   MemoryOutputStream (destData, true).writeFloat (*m_vocals_volume);
+  MemoryOutputStream (destData, true).writeFloat (*m_bass_volume);
+  MemoryOutputStream (destData, true).writeFloat (*m_drums_volume);
+  MemoryOutputStream (destData, true).writeFloat (*m_other_volume);
 }
 
 void SpleetervstAudioProcessor::setStateInformation(const void *data,
@@ -246,6 +255,9 @@ void SpleetervstAudioProcessor::setStateInformation(const void *data,
   // block,
   // whose contents will have been created by the getStateInformation() call.
   m_vocals_volume->setValueNotifyingHost (MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
+  m_bass_volume->setValueNotifyingHost (MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
+  m_drums_volume->setValueNotifyingHost (MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
+  m_other_volume->setValueNotifyingHost (MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
 }
 
 //==============================================================================
