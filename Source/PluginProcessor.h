@@ -20,6 +20,7 @@ class SpleetervstAudioProcessor : public AudioProcessor {
 public:
   //==============================================================================
   SpleetervstAudioProcessor();
+
   ~SpleetervstAudioProcessor();
 
   //==============================================================================
@@ -54,24 +55,12 @@ public:
   //==============================================================================
   void getStateInformation(MemoryBlock &destData) override;
   void setStateInformation(const void *data, int sizeInBytes) override;
-  
-  void setVocalsVolume(double value);
-  double getVocalsVolume() const;
-  void setBassVolume(double value);
-  double getBassVolume() const;
-  void setDrumsVolume(double value);
-  double getDrumsVolume() const;
-  void setOtherVolume(double value);
-  double getOtherVolume() const;
 
 private:
   //==============================================================================
   std::shared_ptr<spleeter::Filter> m_filter;
   std::shared_ptr<rtff::AudioBuffer> m_buffer;
-  double m_vocals_volume;
-  double m_bass_volume;
-  double m_drums_volume;
-  double m_other_volume;
+  AudioParameterFloat* m_vocals_volume;
   
   std::vector<LagrangeInterpolator> m_in_interpolator;
   std::vector<LagrangeInterpolator> m_out_interpolator;

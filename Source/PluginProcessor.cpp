@@ -25,9 +25,9 @@ SpleetervstAudioProcessor::SpleetervstAudioProcessor()
                          )
 #endif
       ,
-      m_filter(nullptr), m_buffer(nullptr), m_vocals_volume(1.0),
-      m_bass_volume(1.0), m_drums_volume(1.0),
-      m_other_volume(1.0) {
+      m_filter(nullptr), m_buffer(nullptr) {
+
+  addParameter (m_vocals_volume = new AudioParameterFloat("m_vocals_volume", "VocalsGain", 0.0f, 1.0f, 1.0f));
 
   std::error_code err;
   auto models_path =
@@ -110,52 +110,15 @@ void SpleetervstAudioProcessor::prepareToPlay(double sampleRate,
   m_interpolation_ratio = static_cast<float>(block_size) / samplesPerBlock;
   
   // Initialize the buffer
-  m_filter->set_volume(0, m_vocals_volume);
-  m_filter->set_volume(1, m_drums_volume);
-  m_filter->set_volume(2, m_bass_volume);
-  m_filter->set_volume(4, m_other_volume);
+  m_filter->set_volume(0, static_cast<double>(m_vocals_volume->get()));
+  m_filter->set_volume(1, 1.0);
+  m_filter->set_volume(2, 1.0);
+  m_filter->set_volume(4, 1.0);
   m_filter->set_block_size(block_size);
   m_buffer = std::make_shared<rtff::AudioBuffer>(block_size, 2);
   
   // Latency
   setLatencySamples(m_filter->FrameLatency() * (1.0 / m_interpolation_ratio));
-}
-
-void SpleetervstAudioProcessor::setVocalsVolume(double value) {
-  m_vocals_volume = value;
-  if (m_filter) {
-    m_filter->set_volume(0, m_vocals_volume);
-  }
-}
-double SpleetervstAudioProcessor::getVocalsVolume() const {
-  return m_vocals_volume;
-}
-void SpleetervstAudioProcessor::setBassVolume(double value) {
-  m_bass_volume = value;
-  if (m_filter) {
-    m_filter->set_volume(2, m_bass_volume);
-  }
-}
-double SpleetervstAudioProcessor::getBassVolume() const {
-  return m_bass_volume;
-}
-void SpleetervstAudioProcessor::setDrumsVolume(double value) {
-  m_drums_volume = value;
-  if (m_filter) {
-    m_filter->set_volume(1, m_drums_volume);
-  }
-}
-double SpleetervstAudioProcessor::getDrumsVolume() const {
-  return m_drums_volume;
-}
-void SpleetervstAudioProcessor::setOtherVolume(double value) {
-  m_other_volume = value;
-  if (m_filter) {
-    m_filter->set_volume(4, m_other_volume);
-  }
-}
-double SpleetervstAudioProcessor::getOtherVolume() const {
-  return m_other_volume;
 }
 
 void SpleetervstAudioProcessor::releaseResources() {
@@ -237,6 +200,7 @@ void SpleetervstAudioProcessor::processBlock(AudioBuffer<float> &buffer,
   }
   
   // convert to stereo
+  m_filter->set_volume(0, static_cast<double>(m_vocals_volume->get()));
   m_filter->ProcessBlock(m_buffer.get());
   
   if (totalNumInputChannels == 2) {
@@ -273,6 +237,7 @@ void SpleetervstAudioProcessor::getStateInformation(MemoryBlock &destData) {
   // You should use this method to store your parameters in the memory block.
   // You could do that either as raw data, or use the XML or ValueTree classes
   // as intermediaries to make it easy to save and load complex data.
+  MemoryOutputStream (destData, true).writeFloat (*m_vocals_volume);
 }
 
 void SpleetervstAudioProcessor::setStateInformation(const void *data,
@@ -280,6 +245,7 @@ void SpleetervstAudioProcessor::setStateInformation(const void *data,
   // You should use this method to restore your parameters from this memory
   // block,
   // whose contents will have been created by the getStateInformation() call.
+  m_vocals_volume->setValueNotifyingHost (MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
 }
 
 //==============================================================================
