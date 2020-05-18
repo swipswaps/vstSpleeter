@@ -26,7 +26,7 @@ SpleetervstAudioProcessor::SpleetervstAudioProcessor()
 #endif
       ,
       m_filter(nullptr), m_buffer(nullptr), m_vocals_volume(1.0),
-      m_bass_volume(1.0), m_drums_volume(1.0), m_piano_volume(1.0),
+      m_bass_volume(1.0), m_drums_volume(1.0),
       m_other_volume(1.0) {
 
   std::error_code err;
@@ -39,9 +39,9 @@ SpleetervstAudioProcessor::SpleetervstAudioProcessor()
           .getFullPathName();
 
   spleeter::Initialize(models_path.toStdString(),
-                       {spleeter::SeparationType::FiveStems}, err);
+                       {spleeter::SeparationType::FourStems}, err);
   m_filter =
-      std::make_shared<spleeter::Filter>(spleeter::SeparationType::FiveStems);
+      std::make_shared<spleeter::Filter>(spleeter::SeparationType::FourStems);
   m_filter->set_extra_frame_latency(10);  // TODO: might be a lot...
   m_filter->Init(err);
 }
@@ -113,7 +113,6 @@ void SpleetervstAudioProcessor::prepareToPlay(double sampleRate,
   m_filter->set_volume(0, m_vocals_volume);
   m_filter->set_volume(1, m_drums_volume);
   m_filter->set_volume(2, m_bass_volume);
-  m_filter->set_volume(3, m_piano_volume);
   m_filter->set_volume(4, m_other_volume);
   m_filter->set_block_size(block_size);
   m_buffer = std::make_shared<rtff::AudioBuffer>(block_size, 2);
@@ -148,15 +147,6 @@ void SpleetervstAudioProcessor::setDrumsVolume(double value) {
 }
 double SpleetervstAudioProcessor::getDrumsVolume() const {
   return m_drums_volume;
-}
-void SpleetervstAudioProcessor::setPianoVolume(double value) {
-  m_piano_volume = value;
-  if (m_filter) {
-    m_filter->set_volume(3, m_piano_volume);
-  }
-}
-double SpleetervstAudioProcessor::getPianoVolume() const {
-  return m_piano_volume;
 }
 void SpleetervstAudioProcessor::setOtherVolume(double value) {
   m_other_volume = value;

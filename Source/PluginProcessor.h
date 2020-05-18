@@ -61,8 +61,6 @@ public:
   double getBassVolume() const;
   void setDrumsVolume(double value);
   double getDrumsVolume() const;
-  void setPianoVolume(double value);
-  double getPianoVolume() const;
   void setOtherVolume(double value);
   double getOtherVolume() const;
 
@@ -73,7 +71,6 @@ private:
   double m_vocals_volume;
   double m_bass_volume;
   double m_drums_volume;
-  double m_piano_volume;
   double m_other_volume;
   
   std::vector<LagrangeInterpolator> m_in_interpolator;

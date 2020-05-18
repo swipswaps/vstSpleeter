@@ -18,7 +18,6 @@ SpleetervstAudioProcessorEditor::SpleetervstAudioProcessorEditor(
   volume_sliders.push_back(std::make_pair("Vocals", &vocals_volume_slider));
   volume_sliders.push_back(std::make_pair("Drums", &drums_volume_slider));
   volume_sliders.push_back(std::make_pair("Bass", &bass_volume_slider));
-  volume_sliders.push_back(std::make_pair("Piano", &piano_volume_slider));
   volume_sliders.push_back(std::make_pair("Other", &other_volume_slider));
 
   setSize(400, 300);
@@ -37,9 +36,6 @@ SpleetervstAudioProcessorEditor::SpleetervstAudioProcessorEditor(
   };
   drums_volume_slider.onValueChange = [this]() {
     processor.setDrumsVolume(drums_volume_slider.getValue());
-  };
-  piano_volume_slider.onValueChange = [this]() {
-    processor.setPianoVolume(piano_volume_slider.getValue());
   };
   other_volume_slider.onValueChange = [this]() {
     processor.setOtherVolume(other_volume_slider.getValue());
@@ -111,7 +107,6 @@ void SpleetervstAudioProcessorEditor::resized() {
 void SpleetervstAudioProcessorEditor::UpdateVolumes() {
   vocals_volume_slider.setValue(processor.getVocalsVolume());
   bass_volume_slider.setValue(processor.getBassVolume());
-  piano_volume_slider.setValue(processor.getPianoVolume());
   drums_volume_slider.setValue(processor.getDrumsVolume());
   other_volume_slider.setValue(processor.getOtherVolume());
 }

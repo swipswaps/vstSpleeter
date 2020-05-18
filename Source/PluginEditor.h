@@ -38,7 +38,6 @@ private:
   Slider vocals_volume_slider;
   Slider drums_volume_slider;
   Slider bass_volume_slider;
-  Slider piano_volume_slider;
   Slider other_volume_slider;
   
   std::list<std::pair<std::string, Slider*>> volume_sliders;
