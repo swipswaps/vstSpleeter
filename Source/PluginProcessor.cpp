@@ -9,7 +9,6 @@
 */
 
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
 #include "spleeter_common/spleeter_common.h"
 
 //==============================================================================
@@ -231,11 +230,11 @@ void SpleetervstAudioProcessor::processBlock(AudioBuffer<float> &buffer,
 
 //==============================================================================
 bool SpleetervstAudioProcessor::hasEditor() const {
-  return true; // (change this to false if you choose to not supply an editor)
+  return false; // (change this to false if you choose to not supply an editor)
 }
 
 AudioProcessorEditor *SpleetervstAudioProcessor::createEditor() {
-  return new SpleetervstAudioProcessorEditor(*this);
+  return nullptr;
 }
 
 //==============================================================================
