@@ -35,8 +35,6 @@ SpleetervstAudioProcessor::SpleetervstAudioProcessor()
   auto models_path =
       File::getSpecialLocation(File::SpecialLocationType::currentExecutableFile)
           .getParentDirectory()
-          .getParentDirectory()
-          .getChildFile("Resources")
           .getChildFile("models")
           .getFullPathName();
 
