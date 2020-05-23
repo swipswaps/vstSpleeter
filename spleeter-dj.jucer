@@ -9,9 +9,6 @@
             file="Source/PluginProcessor.cpp" compilerFlagScheme=""/>
       <FILE id="m29LU9" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="KLCcm9" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="u4ZKf2" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
