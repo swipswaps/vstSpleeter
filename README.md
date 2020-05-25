@@ -28,7 +28,10 @@ Credit for most of this work goes to https://github.com/gvne.
 ## building
 
 1. on macOS: `mkdir build && cd build && cmake -GXcode -Drtff_use_mkl=ON -DCMAKE_INSTALL_PREFIX=$SPLEETERPP_INSTALL_DIR ..`. on windows, replace Xcode with ""Visual Studio 15 2017 Win64"
-2. `cmake --build . --target install --config Release`
+2. run `cmake --build . --target install --config Release`. on MacOS, this may
+   fail if Tensorflow wasn't correctly downloaded. to fix, delete the `(NOT
+   tensorflow_lib OR NOT tensorflow_framework_lib)` condition from
+   cmake/add_tensorflow.cmake, then run step 1 again.
 3. in another folder, do `git clone https://github.com/diracdeltas/vstSpleeter.git && cd vstSpleeter`. on Windows, also do `git checkout feature/windows`
 4. `bash configure.sh $SPLEETERPP_INSTALL_DIR`
 5. open the .jucer file in projucer and click on the VS2017 or xcode icon to
