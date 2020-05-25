@@ -9,11 +9,32 @@ Credit for most of this work goes to https://github.com/gvne.
 
 ## Build:
 
-For MacOS instructions see
-https://github.com/gvne/vstSpleeter/issues/1#issuecomment-609600652, but
-replace https://github.com/gvne/spleeterpp.git  with
-https://github.com/diracdeltas/spleeterpp.git to get the 16kHz models.
+## prerequsites
 
-In spleeterpp, you may have to run the initial cmake multiple times to get
-Tensorflow to download for some reason (or manually download and move
-Tensorflow to the correct location).
+1. Optional: download and install Intel's math kernel library. If you do not
+   install it, leave out the `Drtff_use_mkl=ON` cmake flag and remove the mlk
+   libraries from `externalLibraries` in the jucer file.
+2. Download and install JUCE
+3. On MacOS, install xcode. On Win, install Visual Studio 2017.
+4. On Win, install git-bash.
+4. `git clone https://github.com/diracdeltas/spleeterpp.git && cd spleeterpp`
+5. In bash or git-bash, set `SPLEETERPP_INSTALL_DIR=$(pwd)/install`
+6. Install anaconda from https://docs.anaconda.com/anaconda/install/. On
+   Windows, make sure that conda is in your path and the Python version that
+   comes with Conda precedes the regular system Python in your path (make sure
+   `~/anaconda3` is first in the path and `~/anaconda3/Scripts` is also in the
+   path).
+
+## building
+
+1. on macOS: `mkdir build && cd build && cmake -GXcode -Drtff_use_mkl=ON -DCMAKE_INSTALL_PREFIX=$SPLEETERPP_INSTALL_DIR ..`. on windows, replace Xcode with ""Visual Studio 15 2017 Win64"
+2. `cmake --build . --target install --config Release`
+3. in another folder, do `git clone https://github.com/diracdeltas/vstSpleeter.git && cd vstSpleeter`. on Windows, also do `git checkout feature/windows`
+4. `bash configure.sh $SPLEETERPP_INSTALL_DIR`
+5. open the .jucer file in projucer and click on the VS2017 or xcode icon to
+   open in your IDE.
+6. build the targets in your IDE, making sure that the scheme is set to
+   Release.
+7. on windows, copy `extras/tensorflow.dll` to `%SystemRoot%\system32` (you
+   may need to open File Explorer as administrator to do this), then run
+   postbuild.sh to package the vst3.
